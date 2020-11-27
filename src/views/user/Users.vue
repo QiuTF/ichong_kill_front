@@ -6,14 +6,12 @@
       </a-breadcrumb>
     </div>
     <a-card>
-      <a-col>
-        <template>
-          <div class="record" v-show="is_manage === 'admin' ? true:false">
-            <a-button type="primary" @click="showModal">新增玩家</a-button>
+      <a-table :columns="columns" :data-source="userList">
+        <template slot="avatar" slot-scope="text, record">
+          <div>
+            <a-avatar icon="user" :src="record.avatar"/>
           </div>
         </template>
-      </a-col>
-      <a-table :columns="columns" :data-source="userList">
         <template slot="is_playing" slot-scope="text, record">
           <div>
             <a-switch :checked="record.is_playing === 1 ? true:false" @change="onChange(record.id,record.is_playing)"/>
@@ -21,9 +19,6 @@
         </template>
         <template slot="action" slot-scope="text, record">
           <div>
-            <a href="javascript:;" @click="showModal(record)" :disabled="is_manage === 'admin' ? false:true">
-              编辑
-            </a>
             <a href="javascript:;" @click="handleDeleteClick(record)" style="color: red"
                :disabled="is_manage === 'admin' ? false:true">
               删除
@@ -76,6 +71,11 @@ export default {
           dataIndex: 'id'
         },
         {
+          title: '头像',
+          dataIndex: 'avatar',
+          scopedSlots: {customRender: 'avatar'},
+        },
+        {
           title: '姓名',
           dataIndex: 'player'
         },
@@ -120,38 +120,6 @@ export default {
           }
         })
       })
-    },
-    showModal(record) {
-      this.id = record.id
-      this.player = record.player
-      this.visible = true
-    },
-    handleCancel(e) {
-      this.visible = false
-    },
-    handleOk(e) {
-      this.loading = true
-
-      fetch('http://local.pandakill/api/players', {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + window.sessionStorage.getItem('token')
-        },
-        body: JSON.stringify({id: this.id, player: this.player}),
-      }).then((response) => {
-        response.json().then((result) => {
-          if (response.ok) {
-            this.$message.success(this.id ? '修改成功' : '新增成功')
-            this.getUsers()
-          } else {
-            this.$message.error(result.message)
-          }
-        })
-      })
-
-      this.visible = false
-      this.loading = false
     },
     handleDeleteClick(record) {
       this.$confirm({

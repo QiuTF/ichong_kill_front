@@ -26,12 +26,12 @@
       </template>
       <template slot="action1" slot-scope="text, record">
         <div>
-          <a-radio v-model="mvp[record.id]"></a-radio>
+          <a-switch v-model="mvp[record.id]"></a-switch>
         </div>
       </template>
       <template slot="action2" slot-scope="text, record">
         <div>
-          <a-radio v-model="reward[record.id]" v-if="record.reward && record.reward.amount > 0"></a-radio>
+          <a-switch v-model="reward[record.id]" v-if="record.reward && record.reward.amount > 0"></a-switch>
         </div>
       </template>
     </a-table>
@@ -65,7 +65,7 @@ export default {
           scopedSlots: {customRender: 'action1'},
         },
         {
-          title: '选择身份',
+          title: '是否选择身份',
           dataIndex: 'reward_id',
           scopedSlots: {customRender: 'action2'},
         },
@@ -137,7 +137,7 @@ export default {
               this.$message.success('游戏已结束')
               this.$router.replace({path: '/records'})
             } else {
-              this.$message.error('保存失败')
+              this.$message.error(result.message)
             }
           })
         })

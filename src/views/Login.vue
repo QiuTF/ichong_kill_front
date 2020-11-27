@@ -40,7 +40,7 @@ export default {
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
-          fetch('http://local.pandakill/api/users', {
+          fetch('http://local.pandakill/api/login', {
             method: 'post',
             headers: {
               'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ export default {
             body: JSON.stringify(values),
           }).then((response) => {
             response.json().then((result) => {
-              if (response.ok && result.data) {
+              if (response.ok) {
                 this.$message.success('登录成功')
                 window.sessionStorage.setItem("token", result.data.access_token)
                 window.sessionStorage.setItem("manage", result.data.manage)
