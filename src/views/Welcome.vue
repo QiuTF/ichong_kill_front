@@ -28,7 +28,6 @@ export default {
   name: "Welcome",
   data() {
     return {
-      icon: require('../assets/headerBG.png'),
       endList: [
         {
           index: '第一名',
